@@ -3,6 +3,7 @@
 ## Contents
 
 - Source hierarchy
+- Content-to-HTML transformation
 - Theme synchronization
 - Local user-state boundary
 - Release sequence
@@ -10,22 +11,26 @@
 ## Source hierarchy
 
 1. `archebase-vi-guide` for approved brand evidence and release gates.
-2. `assets/archebase-wechat-safe.css` in this repository for the canonical InkPost CSS payload.
-3. `src/shared/presets/archebase-wechat-safe.ts` in the InkPost repository for the runtime wrapper.
+2. `assets/archebase-wechat-safe.css` in this repository for the canonical WeChat layout CSS payload.
+3. InkPost's built-in ArcheBase preset for runtime rendering.
 4. A local InkPost theme only for comparison and explicit synchronization.
+
+## Content-to-HTML transformation
+
+The normal deliverable is not a modified InkPost installation. It is the HTML produced by InkPost from supplied article content and the canonical CSS:
+
+1. Accept Markdown, or convert supplied prose to Markdown while preserving meaning and claims.
+2. Open the content in InkPost and select the ArcheBase WeChat preset.
+3. Let InkPost render Markdown, inline CSS, process local images and produce the `#nice` clipboard payload.
+4. Inspect the rendered preview and run the CSS scanner.
+5. Click InkPost's existing **复制到剪贴板** action.
+6. Paste into the WeChat editor and verify the external result.
+
+The skill coordinates this sequence; it does not need a second CLI renderer or a modification to InkPost source for ordinary article work.
 
 ## Theme synchronization
 
-The canonical CSS source is `assets/archebase-wechat-safe.css`. The InkPost repository embeds the exact payload inside a TypeScript preset wrapper. Do not make independent edits to the wrapper payload.
-
-Change sequence:
-
-1. Edit the canonical CSS asset.
-2. Run `python3 scripts/validate_inkpost_css.py assets/archebase-wechat-safe.css`.
-3. Copy the exact payload into InkPost's preset wrapper.
-4. Run `python3 scripts/check_preset_parity.py /path/to/inkpost`.
-5. Run InkPost tests and TypeScript checks.
-6. Review the rendered article before release.
+The canonical CSS source is `assets/archebase-wechat-safe.css`. InkPost embeds the same payload in its built-in preset. Change the canonical asset first, then synchronize and parity-check the runtime preset only when the theme itself changes.
 
 ## Local user-state boundary
 
@@ -38,8 +43,9 @@ When explicit synchronization is requested, update only the named theme record a
 - Select `guided` or `strict` through `archebase-vi-guide`.
 - Fill the article brief and identify claims, assets, rights and naming approvals.
 - Validate CSS.
+- Render in InkPost and inspect the preview.
 - Run InkPost's own scanner.
-- Render at the actual WeChat preview width.
-- Inspect the rendered surface, not just source CSS.
+- Copy the rendered HTML through InkPost's existing action.
+- Paste into WeChat and inspect for drift.
 - Run the VI Guide release gates.
 - Return one verdict with unresolved owner and impact.

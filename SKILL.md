@@ -12,25 +12,27 @@ compatibility: "Requires the archebase-vi-guide skill and a supported WeChat lay
 
 # ArcheBase WeChat Layout
 
-A channel/tool adapter for producing consistent ArcheBase WeChat articles. It currently owns InkPost Markdown/CSS layout mechanics, WeChat-safe checks and preset parity. It does not redefine ArcheBase brand rules: load `archebase-vi-guide` for VI evidence, assets, modes and release gates.
+A content-to-HTML layout workflow for ArcheBase WeChat articles. Given article content, use InkPost's Markdown renderer and canonical CSS to produce the final `#nice` HTML payload that can be copied directly into the WeChat editor. This skill owns the transformation and QA contract; InkPost remains the rendering runtime and clipboard surface.
 
 ## Boundary
 
 - `archebase-vi-guide` is the source for brand evidence, Logo assets, colors, typography evidence, visual grammar and release governance.
-- `archebase-wechat-layout` is the source for WeChat article layout, supported tool workflow, CSS compatibility and preset synchronization.
-- InkPost is the runtime: Markdown parsing, preview rendering, CSS inlining, image processing and clipboard export.
-- `archebase-wechat-editor` may be used for article content and narrative editing; it does not replace this layout workflow.
+- `archebase-wechat-layout` defines the Markdown/CSS layout contract and output QA.
+- InkPost is the renderer and clipboard exporter: Markdown parsing, CSS inlining, image processing and copy-to-clipboard.
+- `archebase-wechat-editor` may be used for article content and narrative editing before layout; it does not replace this transformation.
+
+The deliverable is the rendered HTML in the clipboard, not a CSS file, a theme file or a prose review. Do not modify InkPost source as part of normal article layout work.
 
 Do not put InkPost implementation details into `archebase-vi-guide`. Do not treat a local InkPost user theme as the canonical source.
 
 ## Required references
 
 1. Load `archebase-vi-guide` before making brand decisions. If it is unavailable, stop short of claiming VI compliance and report the missing dependency.
-2. Load `references/workflow.md` before editing or synchronizing an InkPost theme.
+2. Load `references/workflow.md` before transforming article content.
 3. Load `references/layout-rules.md` before changing Markdown structure or CSS.
-4. Load `references/release-checklist.md` before reporting a release verdict.
-5. Run `scripts/validate_inkpost_css.py` against the exact CSS being exported.
-6. When changing the built-in InkPost preset, run `scripts/check_preset_parity.py` against the InkPost checkout.
+4. Load `references/release-checklist.md` before copying the final HTML.
+5. Validate the canonical CSS with `scripts/validate_inkpost_css.py` before rendering.
+6. Use InkPost's existing renderer and UI copy action; do not invent a second headless rendering path.
 
 ## Default mode
 
@@ -38,23 +40,27 @@ Use the VI Guide's `guided` mode by default. Use `strict` only when the user ask
 
 ## Workflow
 
-1. Establish article purpose, audience, one-sentence takeaway, Markdown path, target WeChat surface and preview width.
-2. Identify whether this is a new layout, a correction, a CSS import/export or a preset synchronization.
-3. Resolve the canonical CSS from `assets/archebase-wechat-safe.css`; do not silently take CSS from `~/Library/Application Support/墨帖 InkPost/config.json`.
-4. Apply `references/layout-rules.md` to hierarchy, callouts, body copy, images, code and tables.
-5. Run the deterministic CSS validator and InkPost's own CSS scanner.
-6. Render the real Markdown through InkPost and inspect actual wrapping, overflow, contrast, crop and first-screen hierarchy.
-7. For preset changes, run the parity check and update the InkPost wrapper only after the canonical CSS is changed.
+1. Receive article content as Markdown or convert the supplied prose into Markdown while preserving meaning and claims.
+2. Establish audience, one-sentence takeaway, target WeChat surface and preview width.
+3. Resolve the canonical CSS from `assets/archebase-wechat-safe.css`.
+4. Render the Markdown with InkPost using the ArcheBase preset; inspect the actual preview.
+5. Correct hierarchy, callouts, body copy, code, tables, images and any overflow, then render again.
+6. Use InkPost's **复制到剪贴板** action only after preview and scanner checks pass. This copies the renderer's HTML payload, not the source Markdown.
+7. Paste into the WeChat editor as the final external-surface check. If wrapping, images, styles or spacing change, return to Markdown/CSS and re-render.
 8. Apply `archebase-vi-guide` release gates and return one verdict: `可发布`, `修复后复审`, or `阻塞，待确认`.
 
 ## Output contract
 
+The primary output is the rendered HTML copied to the clipboard by InkPost.
+
 Return:
 
+- a confirmation that the HTML was copied through InkPost's existing copy action;
 - mode, article scope and primary audience judgment;
 - theme source and preset identity;
 - layout decisions and changed components;
 - deterministic validator, InkPost scanner and rendered-preview results;
+- the WeChat paste verification result;
 - claims, asset, rights, naming and type approvals still unresolved;
 - final release verdict and owner/impact for every blocker.
 
