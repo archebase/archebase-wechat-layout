@@ -3,25 +3,25 @@ name: archebase-wechat-layout
 description: ArcheBase WeChat article layout and QA workflow. Use whenever creating, correcting, reviewing, importing, exporting, or synchronizing Markdown/CSS for 智域基石公众号 articles, including requests to keep WeChat articles visually consistent, fix typography and hierarchy, check微信兼容性, or prepare content for publication in InkPost or another supported layout tool.
 license: Proprietary. For ArcheBase organization use only; do not redistribute brand assets or internal layout rules.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   source: "ArcheBase VI Guide + WeChat layout"
-  dependency: "archebase-vi-guide"
+  dependency: "archebase-vi-guide, archebase/inkpost"
   repository: "archebase/archebase-wechat-layout"
-compatibility: "Requires archebase-vi-guide, a reachable InkPost render endpoint or the local InkPost UI, and Python 3 for deterministic validators."
+compatibility: "Requires archebase-vi-guide, the public archebase/inkpost renderer at a pinned commit or release, and Python 3 for deterministic validators."
 ---
 
 # ArcheBase WeChat Layout
 
-A self-contained content-to-HTML workflow for ArcheBase WeChat articles. Given article content, run the bundled InkPost renderer runtime with Markdown and the canonical CSS, then return the rendered `#nice` HTML payload. The skill carries the renderer core needed for Markdown parsing, CSS inlining, image processing and math rendering; it does not require a running InkPost app or service.
+A content-to-HTML workflow for ArcheBase WeChat articles. Given article content, invoke the public `archebase/inkpost` renderer with Markdown and the canonical CSS, then return its `#nice` HTML payload. The Skill owns content normalization, brand layout decisions and QA; InkPost remains the single rendering implementation.
 
 ## Boundary
 
 - `archebase-vi-guide` is the source for brand evidence, Logo assets, colors, typography evidence, visual grammar and release governance.
-- `archebase-wechat-layout` is the complete orchestration and renderer package: content normalization, canonical CSS, InkPost-compatible Markdown rendering and release QA.
-- The bundled runtime is a vendored, headless InkPost renderer core. It produces the same `#nice` HTML contract as InkPost's app/server path.
+- `archebase-wechat-layout` is the orchestration layer: content normalization, canonical CSS selection, InkPost invocation and release QA.
+- `archebase/inkpost` is the public runtime: Markdown parsing, CSS inlining, image processing, math rendering and `#nice` HTML generation.
 - `archebase-wechat-editor` may be used for article content and narrative editing before layout; it does not replace this transformation.
 
-The primary deliverable is rendered HTML. Do not modify the separate InkPost application as part of normal article layout work.
+The primary deliverable is rendered HTML. Do not vendor or independently modify InkPost renderer code inside this Skill.
 
 Do not put InkPost implementation details into `archebase-vi-guide`. Do not treat a local InkPost user theme as the canonical source.
 
@@ -31,8 +31,8 @@ Do not put InkPost implementation details into `archebase-vi-guide`. Do not trea
 2. Load `references/workflow.md` before transforming article content.
 3. Load `references/layout-rules.md` before changing Markdown structure or CSS.
 4. Load `references/release-checklist.md` before returning rendered HTML.
-5. Validate the canonical CSS with `scripts/validate_inkpost_css.py` before running the bundled renderer.
-6. Run `scripts/render_wechat_html.mjs` with the bundled runtime; do not call a remote service or require the InkPost application.
+5. Validate the canonical CSS with `scripts/validate_inkpost_css.py` before invoking InkPost.
+6. Resolve and pin an `archebase/inkpost` commit or release; call its renderer contract rather than carrying a copied implementation.
 
 ## Default mode
 

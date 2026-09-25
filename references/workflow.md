@@ -4,7 +4,7 @@
 
 - Source hierarchy
 - Content-to-HTML transformation
-- Endpoint configuration
+- Runtime pinning
 - Theme synchronization
 - Local user-state boundary
 - Release sequence
@@ -13,30 +13,32 @@
 
 1. `archebase-vi-guide` for approved brand evidence and release gates.
 2. `assets/archebase-wechat-safe.css` in this repository for the canonical WeChat layout CSS payload.
-3. InkPost's built-in ArcheBase preset for runtime rendering.
+3. `https://github.com/archebase/inkpost` at a pinned commit or release for rendering.
 4. A local InkPost theme only for comparison and explicit synchronization.
 
 ## Content-to-HTML transformation
 
-The skill carries a standalone InkPost-compatible renderer. It does not require the InkPost app, an online server or a remote endpoint:
+InkPost is a separate public runtime and the only renderer implementation. Pin a commit or release, install its dependencies, and invoke its exported `renderMarkdown(markdown, css, filePath?, imageOptions?)` contract from `src/main/renderer.ts`.
 
-```sh
-npm install --prefix runtime
-npx --prefix runtime tsc
-node scripts/render_wechat_html.mjs article.md --output article.html
+The expected result is:
+
+```ts
+{
+  html: string;
+  imageCount: number;
+  wordCount: number;
+  warnings: string[];
+  totalSizeKB: number;
+}
 ```
 
-The command reads Markdown, applies `assets/archebase-wechat-safe.css`, runs the vendored Markdown/CSS/image/math pipeline and writes InkPost-compatible `#nice` HTML. It reports warnings and render statistics on stderr.
+Use `html` as the WeChat payload. It is already the inline-styled `<section id="nice">…</section>` fragment; do not wrap it or run a second renderer. Inspect warnings and render statistics before delivery.
 
-Use the returned or written HTML as the payload for the WeChat editor. The separate InkPost application remains a visual reference and an optional manual clipboard surface, not a runtime prerequisite.
+An authenticated InkPost online deployment may expose the same contract through `POST /api/render`. Use it only when explicitly configured. Otherwise invoke the pinned repository renderer locally. The Electron UI remains an optional human preview/copy surface.
 
-The skill coordinates this sequence and owns the canonical wrapper; it does not modify the separate InkPost application.
+## Runtime pinning
 
-## Endpoint configuration
-
-No endpoint is required for the standard path. If an organization already operates InkPost online, its `/api/render` result may be used only as an explicitly configured comparison oracle; it must not replace the bundled runtime or become an undocumented production dependency.
-
-The renderer owns transformation. The skill owns the Markdown input, canonical CSS, response inspection and release decision.
+Record the InkPost repository URL and exact commit or release used for each deterministic build. A floating `main` reference is not sufficient evidence that two sessions used the same renderer.
 
 ## Theme synchronization
 

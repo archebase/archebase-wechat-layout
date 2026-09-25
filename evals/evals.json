@@ -38,14 +38,14 @@
     },
     {
       "id": 4,
-      "prompt": "Given a Markdown WeChat article, produce the final HTML directly without requiring InkPost to be installed or running. Use the bundled ArcheBase WeChat renderer and CSS, report warnings, and save the result as HTML for pasting into WeChat.",
-      "expected_output": "The agent runs the bundled renderer command, uses canonical CSS, writes InkPost-compatible #nice HTML and reports render statistics without calling a remote endpoint.",
+      "prompt": "Given a Markdown WeChat article, invoke the public archebase/inkpost renderer at a pinned commit with the canonical ArcheBase CSS and return the final #nice HTML payload. Do not vendor InkPost code into the Skill.",
+      "expected_output": "The agent resolves the public InkPost runtime, pins a version, invokes renderMarkdown or the configured /api/render contract, reports warnings/statistics and returns HTML.",
       "files": [],
       "expectations": [
-        "The response treats the WeChat layout skill as self-contained and does not require a running InkPost service.",
-        "The response runs the bundled renderer command with the supplied Markdown and canonical CSS.",
-        "The response returns or saves rendered #nice HTML and reports warnings and statistics.",
-        "The response does not modify the separate InkPost application."
+        "The response treats archebase/inkpost as the single renderer implementation.",
+        "The response requires a pinned commit or release rather than floating main.",
+        "The response uses the renderMarkdown result contract and returns the html field.",
+        "The response does not copy InkPost source into the Skill or modify the InkPost application."
       ]
     }
   ]
