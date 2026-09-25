@@ -1,17 +1,18 @@
 ---
-name: archebase-wechat-inkpost
-description: ArcheBase WeChat article layout and QA workflow for InkPost. Use whenever creating, correcting, reviewing, importing, exporting, or synchronizing InkPost Markdown/CSS for 智域基石, including requests to keep WeChat articles visually consistent, fix typography and hierarchy, check微信兼容性, or prepare content for公众号 publication.
+name: archebase-wechat-layout
+description: ArcheBase WeChat article layout and QA workflow. Use whenever creating, correcting, reviewing, importing, exporting, or synchronizing Markdown/CSS for 智域基石公众号 articles, including requests to keep WeChat articles visually consistent, fix typography and hierarchy, check微信兼容性, or prepare content for publication in InkPost or another supported layout tool.
 license: Proprietary. For ArcheBase organization use only; do not redistribute brand assets or internal layout rules.
 metadata:
   version: "0.1.0"
-  source: "ArcheBase VI Guide + InkPost"
+  source: "ArcheBase VI Guide + WeChat layout"
   dependency: "archebase-vi-guide"
-compatibility: "Requires the archebase-vi-guide skill and either the InkPost repository or a local InkPost installation. Python 3 is required for deterministic validators."
+  repository: "archebase/archebase-wechat-layout"
+compatibility: "Requires the archebase-vi-guide skill and a supported WeChat layout tool; InkPost is the current adapter. Python 3 is required for deterministic validators."
 ---
 
-# ArcheBase WeChat InkPost
+# ArcheBase WeChat Layout
 
-A channel/tool adapter for producing consistent ArcheBase WeChat articles in InkPost. It owns Markdown/CSS layout mechanics, WeChat-safe checks and InkPost preset parity. It does not redefine ArcheBase brand rules: load `archebase-vi-guide` for VI evidence, assets, modes and release gates.
+A channel/tool adapter for producing consistent ArcheBase WeChat articles. It currently owns InkPost Markdown/CSS layout mechanics, WeChat-safe checks and preset parity. It does not redefine ArcheBase brand rules: load `archebase-vi-guide` for VI evidence, assets, modes and release gates.
 
 ## Boundary
 

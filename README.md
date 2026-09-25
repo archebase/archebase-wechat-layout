@@ -1,22 +1,22 @@
-# ArcheBase WeChat InkPost Skill
+# ArcheBase WeChat Layout Skill
 
-Organization skill for laying out and quality-checking ArcheBase WeChat articles in InkPost.
+Organization skill for laying out and quality-checking ArcheBase WeChat articles.
 
 ## Responsibility boundary
 
 - `archebase-vi-guide`: official brand evidence, Logo assets, visual grammar, modes and release governance.
-- `archebase-wechat-inkpost`: WeChat/InkPost layout rules, canonical CSS, compatibility validation and preset parity.
+- `archebase-wechat-layout`: WeChat layout rules, canonical CSS, compatibility validation and preset parity.
 - `InkPost`: Markdown rendering, preview, CSS inlining, image processing and clipboard export.
 
 The skill depends on `archebase-vi-guide`; it does not redefine brand rules.
 
 ## Install
 
-Install the repository as `archebase-wechat-inkpost` in the organization's skill library, alongside `archebase-vi-guide`:
+Install the repository as `archebase-wechat-layout` in the organization's skill library, alongside `archebase-vi-guide`:
 
 ```sh
-git clone https://github.com/archebase/archebase-wechat-inkpost.git
-ln -s "$PWD/archebase-wechat-inkpost" ~/.agents/skills/archebase-wechat-inkpost
+git clone https://github.com/archebase/archebase-wechat-layout.git
+ln -s "$PWD/archebase-wechat-layout" ~/.agents/skills/archebase-wechat-layout
 ```
 
 ## Validation
