@@ -17,7 +17,7 @@ A channel/tool adapter for producing consistent ArcheBase WeChat articles. It cu
 ## Boundary
 
 - `archebase-vi-guide` is the source for brand evidence, Logo assets, colors, typography evidence, visual grammar and release governance.
-- `archebase-wechat-inkpost` is the source for WeChat article layout, InkPost workflow, CSS compatibility and preset synchronization.
+- `archebase-wechat-layout` is the source for WeChat article layout, supported tool workflow, CSS compatibility and preset synchronization.
 - InkPost is the runtime: Markdown parsing, preview rendering, CSS inlining, image processing and clipboard export.
 - `archebase-wechat-editor` may be used for article content and narrative editing; it does not replace this layout workflow.
 
