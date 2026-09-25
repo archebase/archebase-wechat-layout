@@ -23,6 +23,18 @@
         "The response runs or requests a deterministic parity check rather than comparing names only.",
         "The response does not inspect or commit the complete local InkPost user store."
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Given this Markdown article and the canonical ArcheBase WeChat CSS, call the available InkPost render capability and return the rendered HTML that can be pasted into WeChat. If the endpoint is unavailable, explain the UI fallback.",
+      "expected_output": "The agent calls or describes calling InkPost /api/render with markdown and CSS, returns the RenderResult html as the primary deliverable, reports warnings and uses the UI only as fallback.",
+      "files": [],
+      "expectations": [
+        "The response treats InkPost as the rendering capability rather than merely instructing the user to open it.",
+        "The response uses the canonical CSS and the /api/render request shape.",
+        "The response returns rendered HTML as the primary output and preserves InkPost warnings/stats.",
+        "The response does not modify InkPost source or invent a second renderer."
+      ]
     }
   ]
 }

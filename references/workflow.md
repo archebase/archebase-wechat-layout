@@ -4,6 +4,7 @@
 
 - Source hierarchy
 - Content-to-HTML transformation
+- Endpoint configuration
 - Theme synchronization
 - Local user-state boundary
 - Release sequence
@@ -17,16 +18,25 @@
 
 ## Content-to-HTML transformation
 
-The normal deliverable is not a modified InkPost installation. It is the HTML produced by InkPost from supplied article content and the canonical CSS:
+The skill should call InkPost directly when a reachable render endpoint is available. The current request shape is:
 
-1. Accept Markdown, or convert supplied prose to Markdown while preserving meaning and claims.
-2. Open the content in InkPost and select the ArcheBase WeChat preset.
-3. Let InkPost render Markdown, inline CSS, process local images and produce the `#nice` clipboard payload.
-4. Inspect the rendered preview and run the CSS scanner.
-5. Click InkPost's existing **复制到剪贴板** action.
-6. Paste into the WeChat editor and verify the external result.
+```http
+POST /api/render
+Content-Type: application/json
 
-The skill coordinates this sequence; it does not need a second CLI renderer or a modification to InkPost source for ordinary article work.
+{"markdown":"# Title\n\nBody","css":"...canonical CSS...","filePath":"/absolute/path/article.md"}
+```
+
+The response is InkPost's `RenderResult`; use its `html` field as the final WeChat HTML payload and inspect `warnings`, `wordCount`, `imageCount` and `totalSizeKB` before delivery. Do not wrap the result in a new document: InkPost already returns the `#nice` clipboard fragment.
+
+If `/api/render` is unavailable or requires authentication, open the local InkPost UI, load the same Markdown and select the ArcheBase preset. The UI is a fallback invocation surface, not a different renderer. Use its existing preview, scanner and **复制到剪贴板** action.
+
+The skill coordinates this sequence; it does not modify InkPost source or create a second rendering implementation.
+## Endpoint configuration
+
+Prefer an explicit endpoint supplied by the runtime or project configuration, for example `INKPOST_RENDER_URL`. If no endpoint is supplied, try the configured InkPost service URL documented by the project; do not guess a production hostname. A successful health check does not prove `/api/render` is authorized: treat HTTP 401/403 as an authentication boundary and use the UI fallback.
+
+The endpoint owns rendering. The skill owns the request payload, canonical CSS, response inspection and release decision.
 
 ## Theme synchronization
 
