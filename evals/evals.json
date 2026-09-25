@@ -1,0 +1,28 @@
+{
+  "skill_name": "archebase-wechat-inkpost",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use InkPost to lay out an ArcheBase technical WeChat article. Keep the visual style consistent with the VI Guide and tell me what must be checked before copying it into WeChat.",
+      "expected_output": "The agent loads the VI dependency and the InkPost workflow, uses the canonical CSS source, validates CSS and the InkPost scanner, inspects the rendered article and returns a release verdict.",
+      "files": [],
+      "expectations": [
+        "The response distinguishes brand rules from InkPost/WeChat implementation rules.",
+        "The response uses the explicit VI colors without converting the p.28 labels into component quotas.",
+        "The response requires CSS validation, InkPost scanner results and rendered visual inspection.",
+        "The response reports unresolved claims, rights, naming, font and Logo approvals."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The built-in ArcheBase theme in our InkPost checkout was edited. Determine whether it is safe to release and whether the shared WeChat skill and InkPost preset still agree.",
+      "expected_output": "The agent runs the canonical CSS validator and preset parity checker, identifies any mismatch and blocks release until sources agree.",
+      "files": [],
+      "expectations": [
+        "The response treats the skill CSS as canonical and the InkPost file as a runtime wrapper.",
+        "The response runs or requests a deterministic parity check rather than comparing names only.",
+        "The response does not inspect or commit the complete local InkPost user store."
+      ]
+    }
+  ]
+}
