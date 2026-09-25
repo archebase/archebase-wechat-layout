@@ -47,6 +47,19 @@
         "The response uses the renderMarkdown result contract and returns the html field.",
         "The response does not copy InkPost source into the Skill or modify the InkPost application."
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "Convert this plain Chinese WeChat稿件 into Markdown for InkPost: extract the external公众号 title, subtitle, peer top-level body sections, abstract, quoted speaker statements, image placeholders and every 〔待确认〕 field. Then prepare it for ArcheBase WeChat rendering without inventing missing images or facts.",
+      "expected_output": "The agent returns external title metadata plus normalized body Markdown: peer body sections use h1, nested sections use h2/h3, abstract uses an info block, warnings preserve unconfirmed fields, quotes use blockquotes, and missing images remain explicit blockers.",
+      "files": [],
+      "expectations": [
+        "The response extracts the public-account main title as external metadata rather than repeating it in the body.",
+        "The response gives peer top-level body sections the same h1 level and uses lower levels only for nesting.",
+        "The response preserves every bracketed confirmation field as unresolved.",
+        "The response represents missing images as explicit placeholders rather than fabricated paths or images.",
+        "The response identifies that proposed quotes cannot be published before speaker confirmation."
+      ]
     }
   ]
 }

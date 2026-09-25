@@ -2,7 +2,8 @@
 
 - [ ] `archebase-vi-guide` loaded and mode selected: `guided` or `strict`.
 - [ ] Article brief identifies audience, one-sentence takeaway, destination and preview width.
-- [ ] One `h1`; no more than three meaningful hierarchy levels.
+- [ ] The公众号 main title is captured as external title metadata and is not duplicated in the body unless explicitly requested.
+- [ ] Peer top-level body sections share `h1`; nested sections use `h2`/`h3`; no short sentence is promoted solely because of length.
 - [ ] Theme source is named and canonical CSS identity is recorded.
 - [ ] `validate_inkpost_css.py` passes against the exact CSS being rendered.
 - [ ] InkPost's own WeChat scanner has no unreviewed warning.

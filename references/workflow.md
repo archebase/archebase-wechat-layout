@@ -3,6 +3,7 @@
 ## Contents
 
 - Source hierarchy
+- Manuscript-to-Markdown extraction
 - Content-to-HTML transformation
 - Runtime pinning
 - Theme synchronization
@@ -15,6 +16,23 @@
 2. `assets/archebase-wechat-safe.css` in this repository for the canonical WeChat layout CSS payload.
 3. `https://github.com/archebase/inkpost` at a pinned commit or release for rendering.
 4. A local InkPost theme only for comparison and explicit synchronization.
+
+## Manuscript-to-Markdown extraction
+
+When input is plain prose rather than Markdown, normalize it before invoking InkPost:
+
+1. Preserve the supplied wording and facts; do not silently rewrite claims.
+2. Extract `主标题` as external公众号 title metadata. Do not repeat it in the Markdown body unless the user explicitly requests an in-body title.
+3. Convert a value labeled `副标题` to a normal paragraph with a bold lead-in; do not create a heading unless the user explicitly identifies it as a structural section.
+4. Convert `摘要` to an `::: info` block; the abstract is content, not a heading.
+5. Convert peer top-level body sections such as `智域基石：…`, `千觉：…`, `连接…`, `关于智域基石` and `关于千觉` to `h1`. Convert sections nested under them to `h2`, and deeper subsections to `h3`.
+6. Convert explicit `---` separators to Markdown `---`.
+7. Convert standalone `[图片]` markers to image placeholders with descriptive alt text. If no actual image file or approved asset exists, do not invent a URL or image; retain a visible `待补充` placeholder and block release.
+8. Convert `-` lines to list items, quoted speaker sections to blockquotes, and labeled warnings/confirmation notes to `::: warning` blocks.
+9. Preserve every `〔…〕` field as an unresolved placeholder. Add it to the release blocker list; never fill it from inference.
+10. Render the normalized Markdown with the canonical CSS through the pinned public InkPost runtime.
+
+The normalized Markdown is an intermediate artifact. The primary delivery remains InkPost's rendered `#nice` HTML.
 
 ## Content-to-HTML transformation
 

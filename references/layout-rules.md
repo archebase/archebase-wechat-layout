@@ -11,8 +11,13 @@
 
 ## Hierarchy
 
-- Use one `h1` for the article title.
-- Use `h2` and `h3` for meaningful sections; keep no more than three meaningful hierarchy levels.
+- The public-account platform's **主标题 / title field** is external metadata and is normally not repeated inside the Markdown body.
+- Body-level top sections use Markdown `#` / HTML `h1`. In a normal公众号 article, `智域基石：…`, `千觉：…`, `连接…`, `关于智域基石` and `关于千觉` are peer top-level body sections and should share the same `h1` treatment.
+- A **副标题**, short explanatory line or preview sentence is not a body heading by default. Render it as a normal paragraph, bold lead-in or `::: info` content according to its semantic role.
+- **摘要** is not a heading by default; render it as an `::: info` summary block when the manuscript labels it as an abstract/preview.
+- Nested sections inside a body `h1` become `h2`; deeper subsections become `h3`.
+- Do not promote a short standalone sentence to a heading only because it is short.
+- Keep no more than three meaningful body hierarchy levels.
 - Put the conclusion before explanatory metadata where the article permits.
 - Do not create decorative headings or use color as a substitute for structure.
 
