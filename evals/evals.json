@@ -35,6 +35,18 @@
         "The response returns rendered HTML as the primary output and preserves InkPost warnings/stats.",
         "The response does not modify InkPost source or invent a second renderer."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Given a Markdown WeChat article, produce the final HTML directly without requiring InkPost to be installed or running. Use the bundled ArcheBase WeChat renderer and CSS, report warnings, and save the result as HTML for pasting into WeChat.",
+      "expected_output": "The agent runs the bundled renderer command, uses canonical CSS, writes InkPost-compatible #nice HTML and reports render statistics without calling a remote endpoint.",
+      "files": [],
+      "expectations": [
+        "The response treats the WeChat layout skill as self-contained and does not require a running InkPost service.",
+        "The response runs the bundled renderer command with the supplied Markdown and canonical CSS.",
+        "The response returns or saves rendered #nice HTML and reports warnings and statistics.",
+        "The response does not modify the separate InkPost application."
+      ]
     }
   ]
 }

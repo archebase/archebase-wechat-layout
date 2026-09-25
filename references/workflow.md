@@ -18,25 +18,25 @@
 
 ## Content-to-HTML transformation
 
-The skill should call InkPost directly when a reachable render endpoint is available. The current request shape is:
+The skill carries a standalone InkPost-compatible renderer. It does not require the InkPost app, an online server or a remote endpoint:
 
-```http
-POST /api/render
-Content-Type: application/json
-
-{"markdown":"# Title\n\nBody","css":"...canonical CSS...","filePath":"/absolute/path/article.md"}
+```sh
+npm install --prefix runtime
+npx --prefix runtime tsc
+node scripts/render_wechat_html.mjs article.md --output article.html
 ```
 
-The response is InkPost's `RenderResult`; use its `html` field as the final WeChat HTML payload and inspect `warnings`, `wordCount`, `imageCount` and `totalSizeKB` before delivery. Do not wrap the result in a new document: InkPost already returns the `#nice` clipboard fragment.
+The command reads Markdown, applies `assets/archebase-wechat-safe.css`, runs the vendored Markdown/CSS/image/math pipeline and writes InkPost-compatible `#nice` HTML. It reports warnings and render statistics on stderr.
 
-If `/api/render` is unavailable or requires authentication, open the local InkPost UI, load the same Markdown and select the ArcheBase preset. The UI is a fallback invocation surface, not a different renderer. Use its existing preview, scanner and **复制到剪贴板** action.
+Use the returned or written HTML as the payload for the WeChat editor. The separate InkPost application remains a visual reference and an optional manual clipboard surface, not a runtime prerequisite.
 
-The skill coordinates this sequence; it does not modify InkPost source or create a second rendering implementation.
+The skill coordinates this sequence and owns the canonical wrapper; it does not modify the separate InkPost application.
+
 ## Endpoint configuration
 
-Prefer an explicit endpoint supplied by the runtime or project configuration, for example `INKPOST_RENDER_URL`. If no endpoint is supplied, try the configured InkPost service URL documented by the project; do not guess a production hostname. A successful health check does not prove `/api/render` is authorized: treat HTTP 401/403 as an authentication boundary and use the UI fallback.
+No endpoint is required for the standard path. If an organization already operates InkPost online, its `/api/render` result may be used only as an explicitly configured comparison oracle; it must not replace the bundled runtime or become an undocumented production dependency.
 
-The endpoint owns rendering. The skill owns the request payload, canonical CSS, response inspection and release decision.
+The renderer owns transformation. The skill owns the Markdown input, canonical CSS, response inspection and release decision.
 
 ## Theme synchronization
 
@@ -48,14 +48,12 @@ InkPost persists user themes and drafts under its platform-specific application 
 
 When explicit synchronization is requested, update only the named theme record and preserve every other store field. If the local theme differs from the canonical CSS, report the diff and source identity.
 
-## Release sequence
-
 - Select `guided` or `strict` through `archebase-vi-guide`.
 - Fill the article brief and identify claims, assets, rights and naming approvals.
 - Validate CSS.
-- Render in InkPost and inspect the preview.
-- Run InkPost's own scanner.
-- Copy the rendered HTML through InkPost's existing action.
-- Paste into WeChat and inspect for drift.
+- Run the bundled renderer and inspect the generated HTML.
+- Check warnings and render statistics.
+- Open the generated HTML in a browser or paste it into WeChat for surface verification.
+- Use the separate InkPost UI only when a human wants its manual preview/copy surface.
 - Run the VI Guide release gates.
 - Return one verdict with unresolved owner and impact.

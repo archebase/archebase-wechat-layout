@@ -12,16 +12,16 @@ compatibility: "Requires archebase-vi-guide, a reachable InkPost render endpoint
 
 # ArcheBase WeChat Layout
 
-A direct content-to-HTML workflow for ArcheBase WeChat articles. Given article content, call InkPost's existing `/api/render` capability with Markdown and the canonical CSS, then return the rendered `#nice` HTML payload. If the service endpoint is unavailable, use the local InkPost UI as the fallback renderer and copy action. This skill owns orchestration and QA; it does not modify InkPost source.
+A self-contained content-to-HTML workflow for ArcheBase WeChat articles. Given article content, run the bundled InkPost renderer runtime with Markdown and the canonical CSS, then return the rendered `#nice` HTML payload. The skill carries the renderer core needed for Markdown parsing, CSS inlining, image processing and math rendering; it does not require a running InkPost app or service.
 
 ## Boundary
 
 - `archebase-vi-guide` is the source for brand evidence, Logo assets, colors, typography evidence, visual grammar and release governance.
-- `archebase-wechat-layout` is the orchestration layer: content normalization, canonical CSS selection, InkPost invocation and release QA.
-- InkPost is the rendering capability: Markdown parsing, CSS inlining, image processing, `#nice` HTML generation and clipboard export.
+- `archebase-wechat-layout` is the complete orchestration and renderer package: content normalization, canonical CSS, InkPost-compatible Markdown rendering and release QA.
+- The bundled runtime is a vendored, headless InkPost renderer core. It produces the same `#nice` HTML contract as InkPost's app/server path.
 - `archebase-wechat-editor` may be used for article content and narrative editing before layout; it does not replace this transformation.
 
-The primary deliverable is rendered HTML, not a CSS file, a theme file or a prose review. Do not modify InkPost source as part of normal article layout work.
+The primary deliverable is rendered HTML. Do not modify the separate InkPost application as part of normal article layout work.
 
 Do not put InkPost implementation details into `archebase-vi-guide`. Do not treat a local InkPost user theme as the canonical source.
 
@@ -31,8 +31,8 @@ Do not put InkPost implementation details into `archebase-vi-guide`. Do not trea
 2. Load `references/workflow.md` before transforming article content.
 3. Load `references/layout-rules.md` before changing Markdown structure or CSS.
 4. Load `references/release-checklist.md` before returning rendered HTML.
-5. Validate the canonical CSS with `scripts/validate_inkpost_css.py` before calling InkPost.
-6. Call InkPost's existing render capability; do not implement a second Markdown/CSS renderer.
+5. Validate the canonical CSS with `scripts/validate_inkpost_css.py` before running the bundled renderer.
+6. Run `scripts/render_wechat_html.mjs` with the bundled runtime; do not call a remote service or require the InkPost application.
 
 ## Default mode
 
