@@ -6,7 +6,7 @@
       "prompt": "Use InkPost to lay out an ArcheBase technical WeChat article. Keep the visual style consistent with the VI Guide and tell me what must be checked before copying it into WeChat.",
       "expected_output": "The agent loads the VI dependency and the InkPost workflow, uses the canonical CSS source, validates CSS and the InkPost scanner, inspects the rendered article and returns a release verdict.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "The response distinguishes brand rules from InkPost/WeChat implementation rules.",
         "The response uses the explicit VI colors without converting the p.28 labels into component quotas.",
         "The response requires CSS validation, InkPost scanner results and rendered visual inspection.",
@@ -18,7 +18,7 @@
       "prompt": "The built-in ArcheBase theme in our InkPost checkout was edited. Determine whether it is safe to release and whether the shared WeChat skill and InkPost preset still agree.",
       "expected_output": "The agent runs the canonical CSS validator and preset parity checker, identifies any mismatch and blocks release until sources agree.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "The response treats the skill CSS as canonical and the InkPost file as a runtime wrapper.",
         "The response runs or requests a deterministic parity check rather than comparing names only.",
         "The response does not inspect or commit the complete local InkPost user store."
@@ -29,7 +29,7 @@
       "prompt": "Given this Markdown article and the canonical ArcheBase WeChat CSS, call the available InkPost render capability and return the rendered HTML that can be pasted into WeChat. If the endpoint is unavailable, explain the UI fallback.",
       "expected_output": "The agent calls or describes calling InkPost /api/render with markdown and CSS, returns the RenderResult html as the primary deliverable, reports warnings and uses the UI only as fallback.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "The response treats InkPost as the rendering capability rather than merely instructing the user to open it.",
         "The response uses the canonical CSS and the /api/render request shape.",
         "The response returns rendered HTML as the primary output and preserves InkPost warnings/stats.",
@@ -41,7 +41,7 @@
       "prompt": "Given a Markdown WeChat article, invoke the public archebase/inkpost renderer at a pinned commit with the canonical ArcheBase CSS and return the final #nice HTML payload. Do not vendor InkPost code into the Skill.",
       "expected_output": "The agent resolves the public InkPost runtime, pins a version, invokes renderMarkdown or the configured /api/render contract, reports warnings/statistics and returns HTML.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "The response treats archebase/inkpost as the single renderer implementation.",
         "The response requires a pinned commit or release rather than floating main.",
         "The response uses the renderMarkdown result contract and returns the html field.",
@@ -53,7 +53,7 @@
       "prompt": "Convert this plain Chinese WeChat稿件 into Markdown for InkPost: extract the external公众号 title, subtitle, peer top-level body sections, abstract, quoted speaker statements, image placeholders and every 〔待确认〕 field. Then prepare it for ArcheBase WeChat rendering without inventing missing images or facts.",
       "expected_output": "The agent returns external title metadata plus normalized body Markdown: peer body sections use h1, nested sections use h2/h3, abstract uses an info block, warnings preserve unconfirmed fields, quotes use blockquotes, and missing images remain explicit blockers.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "The response extracts the public-account main title as external metadata rather than repeating it in the body.",
         "The response gives peer top-level body sections the same h1 level and uses lower levels only for nesting.",
         "The response preserves every bracketed confirmation field as unresolved.",
